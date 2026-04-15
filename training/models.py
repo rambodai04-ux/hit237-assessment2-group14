@@ -29,8 +29,8 @@ class Region(models.Model):
         return (
             cls.objects
             .annotate(
-                program_count=Count("programs"),               # Task 1.4.1
-                active_program_count=Count(                    # Task 1.4.2 filtered Count
+                program_count=Count("programs"),               
+                active_program_count=Count(                    
                     "programs",
                     filter=Q(programs__is_active=True)
                 ),
@@ -73,13 +73,13 @@ class Category(models.Model):
         return (
             cls.objects
             .annotate(
-                program_count=Count("programs"),               # Task 1.4.1 total
-                active_program_count=Count(                    # Task 1.4.2 filtered
+                program_count=Count("programs"),               
+                active_program_count=Count(                    
                     "programs",
                     filter=Q(programs__is_active=True)
                 ),
             )
-            .order_by("-active_program_count")                 # Task 1.4.1 descending
+            .order_by("-active_program_count")                
         )
 
 
@@ -144,7 +144,7 @@ class TrainingProgram(models.Model):
         """
         return (
             cls.get_active_programs()
-            .filter(category__name=category_name)              # Task 1.2.3 __ traversal
+            .filter(category__name=category_name)             
         )
 
     @classmethod
@@ -152,7 +152,7 @@ class TrainingProgram(models.Model):
         """Task 1.2.3 — __ traversal + icontains across FK."""
         return (
             cls.get_active_programs()
-            .filter(region__name__icontains=region_name)       # Task 1.2.3 icontains
+            .filter(region__name__icontains=region_name)       
         )
 
     @classmethod
@@ -162,7 +162,7 @@ class TrainingProgram(models.Model):
         """
         return (
             cls.get_active_programs()
-            .filter(duration_weeks__gte=min_weeks)             # Task 1.2.1 __gte
+            .filter(duration_weeks__gte=min_weeks)           
             .order_by("duration_weeks")
         )
 
@@ -174,9 +174,9 @@ class TrainingProgram(models.Model):
         """
         return (
             Category.objects
-            .annotate(num_programs=Count("programs"))          # Task 1.4.1
-            .filter(num_programs__gte=1)                       # filter on annotation
-            .order_by("-num_programs")                         # descending
+            .annotate(num_programs=Count("programs"))         
+            .filter(num_programs__gte=1)                       
+            .order_by("-num_programs")                        
         )
 
     @classmethod
@@ -196,12 +196,12 @@ class TrainingProgram(models.Model):
                     "programs",
                     queryset=cls.objects
                              .filter(is_active=True)
-                             .select_related("category")        # Task 1.3.2 nested
+                             .select_related("category")       
                              .order_by("-created_at"),
                 )
             )
             .annotate(
-                active_program_count=Count(                    # Task 1.4.2
+                active_program_count=Count(                   
                     "programs",
                     filter=Q(programs__is_active=True)
                 )
