@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Regions — NT Workforce Training Pathways{% endblock %}
+
+{% block content %}
+
+<div class="section-header">
+  <h1 class="section-title">Browse by Region</h1>
+  <p class="section-subtitle">Find training programs available in your area across the Northern Territory.</p>
+</div>
+
+<div class="programs-grid">
+  {% for region in regions %}
+  <div class="program-card">
+    <img src="{% static 'training/images/hero.jpg' %}" alt="{{ region.name }}" class="card-image">
+    <div class="card-body">
+      <h3 class="card-title">{{ region.name }}</h3>
+      <p class="card-description">{{ region.description }}</p>
+      <div class="card-meta">
+        <a href="{% url 'training:program_list' %}?region={{ region.id }}" class="btn btn-primary">
+          View Programs →
+        </a>
+      </div>
+    </div>
+  </div>
+  {% empty %}
+  <div class="empty-state">
+    <div class="empty-state-icon">📍</div>
+    <h3>No regions found</h3>
+    <p>Regions will appear here once added.</p>
+  </div>
+  {% endfor %}
+</div>
+
+{% endblock %}

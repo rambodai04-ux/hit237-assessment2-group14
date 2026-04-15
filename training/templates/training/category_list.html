@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Categories — NT Workforce Training Pathways{% endblock %}
+
+{% block content %}
+
+<div class="section-header">
+  <h1 class="section-title">Browse by Industry</h1>
+  <p class="section-subtitle">Explore workforce training opportunities across key NT industries.</p>
+</div>
+
+<div class="categories-grid">
+
+  <a href="{% url 'training:program_list' %}?category=1" class="category-card">
+    <img src="{% static 'training/images/construction.jpg' %}" alt="Construction" class="category-card-image">
+    <div class="category-card-overlay"></div>
+    <div class="category-card-content">
+      <div class="category-card-title">🏗️ Construction</div>
+      <div class="category-card-count">Building & Infrastructure</div>
+    </div>
+  </a>
+
+  <a href="{% url 'training:program_list' %}?category=2" class="category-card">
+    <img src="{% static 'training/images/care.jpg' %}" alt="Care Services" class="category-card-image">
+    <div class="category-card-overlay"></div>
+    <div class="category-card-content">
+      <div class="category-card-title">🤝 Care Services</div>
+      <div class="category-card-count">Community & Health Care</div>
+    </div>
+  </a>
+
+  <a href="{% url 'training:program_list' %}?category=3" class="category-card">
+    <img src="{% static 'training/images/land.jpg' %}" alt="Land Management" class="category-card-image">
+    <div class="category-card-overlay"></div>
+    <div class="category-card-content">
+      <div class="category-card-title">🌿 Land Management</div>
+      <div class="category-card-count">Environment & Agriculture</div>
+    </div>
+  </a>
+
+  <a href="{% url 'training:program_list' %}?category=4" class="category-card">
+    <img src="{% static 'training/images/tourism.jpg' %}" alt="Tourism" class="category-card-image">
+    <div class="category-card-overlay"></div>
+    <div class="category-card-content">
+      <div class="category-card-title">🏞️ Tourism</div>
+      <div class="category-card-count">Hospitality & Tourism</div>
+    </div>
+  </a>
+
+</div>
+
+{% endblock %}

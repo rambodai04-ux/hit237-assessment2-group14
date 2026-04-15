@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Training Programs — NT Workforce Training Pathways{% endblock %}
+
+{% block hero %}
+<section class="hero">
+  <img src="{% static 'training/images/hero.jpg' %}" alt="Northern Territory" class="hero-image">
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <span class="hero-badge">Northern Territory</span>
+    <h1 class="hero-title">Find Your <span>Training</span> Pathway</h1>
+    <p class="hero-subtitle">Discover workforce training opportunities across the NT in construction, care services, land management and tourism.</p>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="hero-stat-number">4</div>
+        <div class="hero-stat-label">Industries</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-number">4</div>
+        <div class="hero-stat-label">Regions</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-number">100%</div>
+        <div class="hero-stat-label">Free to Browse</div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block content %}
+
+<form method="GET" action="">
+  <div class="filter-bar">
+    <div class="filter-group">
+      <label class="filter-label">Filter by Region</label>
+      <select name="region" class="filter-select">
+        <option value="">All Regions</option>
+        {% for region in regions %}
+          <option value="{{ region.id }}" {% if selected_region == region.id|stringformat:"s" %}selected{% endif %}>
+            {{ region.name }}
+          </option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="filter-group">
+      <label class="filter-label">Filter by Category</label>
+      <select name="category" class="filter-select">
+        <option value="">All Categories</option>
+        {% for category in categories %}
+          <option value="{{ category.id }}" {% if selected_category == category.id|stringformat:"s" %}selected{% endif %}>
+            {{ category.get_name_display }}
+          </option>
+        {% endfor %}
+      </select>
+    </div>
+    <button type="submit" class="btn btn-accent">Apply Filters</button>
+    {% if selected_region or selected_category %}
+      <a href="{% url 'training:program_list' %}" class="btn btn-outline">Clear</a>
+    {% endif %}
+  </div>
+</form>
+
+<div class="section-header">
+  <h2 class="section-title">Training Programs</h2>
+  <p class="section-subtitle">{{ programs|length }} program{{ programs|length|pluralize }} available</p>
+</div>
+
+{% if programs %}
+  <div class="programs-grid">
+    {% for program in programs %}
+    <a href="{% url 'training:program_detail' program.pk %}" class="program-card">
+ {% if program.title == "Diploma of Construction Management" %}
+  <img src="{% static 'training/images/construction2.jpg' %}" alt="{{ program.title }}" class="card-image">
+{% elif program.title == "Certificate III in Community Services" %}
+  <img src="{% static 'training/images/community.jpg' %}" alt="{{ program.title }}" class="card-image">
+{% elif program.category.name == "construction" %}
+  <img src="{% static 'training/images/construction.jpg' %}" alt="{{ program.category.name }}" class="card-image">
+{% elif program.category.name == "care" %}
+  <img src="{% static 'training/images/care.jpg' %}" alt="{{ program.category.name }}" class="card-image">
+{% elif program.category.name == "land_management" %}
+  <img src="{% static 'training/images/land.jpg' %}" alt="{{ program.category.name }}" class="card-image">
+{% else %}
+  <img src="{% static 'training/images/tourism.jpg' %}" alt="{{ program.category.name }}" class="card-image">
+{% endif %}
+      <div class="card-body">
+        <div class="card-tags">
+          <span class="tag tag-{{ program.category.name|lower|cut:' ' }}">{{ program.category.name }}</span>
+          <span class="tag tag-region">{{ program.region.name }}</span>
+        </div>
+        <h3 class="card-title">{{ program.title }}</h3>
+        <p class="card-description">{{ program.description|truncatewords:20 }}</p>
+        <div class="card-meta">
+          <span class="card-duration">⏱ {{ program.duration_weeks }} weeks</span>
+          <span class="card-arrow">→</span>
+        </div>
+      </div>
+    </a>
+    {% endfor %}
+  </div>
+{% else %}
+  <div class="empty-state">
+    <div class="empty-state-icon">🔍</div>
+    <h3>No programs found</h3>
+    <p>Try adjusting your filters or <a href="{% url 'training:program_list' %}">view all programs</a></p>
+  </div>
+{% endif %}
+
+{% endblock %}

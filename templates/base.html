@@ -1,0 +1,66 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}NT Workforce Training Pathways{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'training/styles.css' %}">
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="navbar-inner">
+      <a href="{% url 'training:program_list' %}" class="navbar-brand">
+        NT <span>Workforce</span> Training
+      </a>
+      <div class="navbar-links">
+        <a href="{% url 'training:program_list' %}" class="navbar-link">Programs</a>
+        <a href="{% url 'training:region_list' %}" class="navbar-link">Regions</a>
+        <a href="{% url 'training:category_list' %}" class="navbar-link">Categories</a>
+        <a href="/admin/" class="navbar-link admin-link">Admin</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero (only on homepage) -->
+  {% block hero %}{% endblock %}
+
+  <!-- Main Content -->
+  <main class="main-content">
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-top">
+        <div>
+          <div class="footer-brand">NT Workforce Training Pathways</div>
+          <p class="footer-desc">Connecting Northern Territory job seekers with training opportunities in construction, care services, land management and tourism.</p>
+        </div>
+        <div>
+          <div class="footer-heading">Quick Links</div>
+          <ul class="footer-links">
+            <li><a href="{% url 'training:program_list' %}">All Programs</a></li>
+            <li><a href="{% url 'training:region_list' %}">Browse by Region</a></li>
+            <li><a href="{% url 'training:category_list' %}">Browse by Category</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="footer-heading">Resources</div>
+          <ul class="footer-links">
+            <li><a href="https://jobsandskills.gov.au" target="_blank">Jobs & Skills Australia</a></li>
+            <li><a href="https://nt.gov.au" target="_blank">NT Government</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2026 NT Workforce Training Pathways — HIT237 Assessment 2 — Group 14</p>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
