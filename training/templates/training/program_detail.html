@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "training/base.html" %}
 {% load static %}
 
 {% block title %}{{ program.title }} — NT Workforce Training Pathways{% endblock %}
@@ -21,8 +21,13 @@
   <div class="detail-hero-content">
     <div class="card-tags mb-1">
       <span class="tag tag-region">{{ program.region.name }}</span>
-    </div>
+      <span class="tag tag-{{ program.category.name }}">{{ program.category.get_name_display }}</span>
+      {% if is_long %}
+        <span class="tag tag-long">Extended Program</span>
+      {% endif %}
+      </div>
     <h1 class="detail-title">{{ program.title }}</h1>
+    <p class="detail-summary">{{ program_summary }}</p>
   </div>
 </div>
 
@@ -37,15 +42,23 @@
     <h2>Program Details</h2>
     <div class="info-item">
       <span class="info-label">Category</span>
-      <span class="info-value">{{ program.category.get_name_display }}</span>
+      <span class="info-value">
+        <a href="{% url 'training:category_detail' program.category.name %}">
+          {{ program.category.get_name_display }}
+        </a>
+      </span>
     </div>
     <div class="info-item">
       <span class="info-label">Region</span>
-      <span class="info-value">{{ program.region.name }}</span>
+      <span class="info-value">
+        <a href="{% url 'training:region_detail' program.region.slug %}">
+          {{ program.region.name }}
+        </a>
+      </span>
     </div>
     <div class="info-item">
       <span class="info-label">Duration</span>
-      <span class="info-value">{{ program.duration_weeks }} weeks</span>
+      <span class="info-value">{{ program.duration_display }}</span>
     </div>
     <div class="info-item">
       <span class="info-label">Status</span>
@@ -55,6 +68,10 @@
       <span class="info-label">Added</span>
       <span class="info-value">{{ program.created_at|date:"d M Y" }}</span>
     </div>
+  </div>
+    <div class="info-item">
+    <span class="info-label">Last Updated</span>
+    <span class="info-value">{{ program.updated_at|date:"d M Y" }}</span>
   </div>
 </div>
 

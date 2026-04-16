@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "training/base.html" %}
 {% load static %}
 
 {% block title %}Training Programs — NT Workforce Training Pathways{% endblock %}
@@ -17,7 +17,7 @@
         <div class="hero-stat-label">Industries</div>
       </div>
       <div class="hero-stat">
-        <div class="hero-stat-number">4</div>
+        <div class="hero-stat-number">{{ regions|length }}</div>
         <div class="hero-stat-label">Regions</div>
       </div>
       <div class="hero-stat">
@@ -33,32 +33,49 @@
 
 <form method="GET" action="">
   <div class="filter-bar">
+
+    <!-- Search — Task 1.2.3 icontains filter in view -->
+    <div class="filter-group">
+      <label class="filter-label">Search</label>
+      <input type="text" name="q" value="{{ search_query }}"
+             placeholder="Search programs…" class="filter-select">
+    </div>
+
+    <!-- Region filter — uses region.id -->
     <div class="filter-group">
       <label class="filter-label">Filter by Region</label>
       <select name="region" class="filter-select">
         <option value="">All Regions</option>
         {% for region in regions %}
-          <option value="{{ region.id }}" {% if selected_region == region.id|stringformat:"s" %}selected{% endif %}>
+          <option value="{{ region.id }}"
+            {% if selected_region == region.id|stringformat:"s" %}selected{% endif %}>
             {{ region.name }}
+            {% if region.active_program_count %}({{ region.active_program_count }}){% endif %}
           </option>
         {% endfor %}
       </select>
     </div>
+
+    <!-- Category filter — uses category.id -->
     <div class="filter-group">
       <label class="filter-label">Filter by Category</label>
       <select name="category" class="filter-select">
         <option value="">All Categories</option>
         {% for category in categories %}
-          <option value="{{ category.id }}" {% if selected_category == category.id|stringformat:"s" %}selected{% endif %}>
+          <option value="{{ category.id }}"
+            {% if selected_category == category.id|stringformat:"s" %}selected{% endif %}>
             {{ category.get_name_display }}
+            {% if category.active_program_count %}({{ category.active_program_count }}){% endif %}
           </option>
         {% endfor %}
       </select>
     </div>
+
     <button type="submit" class="btn btn-accent">Apply Filters</button>
-    {% if selected_region or selected_category %}
+    {% if selected_region or selected_category or search_query %}
       <a href="{% url 'training:program_list' %}" class="btn btn-outline">Clear</a>
     {% endif %}
+
   </div>
 </form>
 
@@ -70,35 +87,60 @@
 {% if programs %}
   <div class="programs-grid">
     {% for program in programs %}
-    <a href="{% url 'training:program_detail' program.pk %}" class="program-card">
- {% if program.title == "Diploma of Construction Management" %}
-  <img src="{% static 'training/images/construction2.jpg' %}" alt="{{ program.title }}" class="card-image">
-{% elif program.title == "Certificate III in Community Services" %}
-  <img src="{% static 'training/images/community.jpg' %}" alt="{{ program.title }}" class="card-image">
-{% elif program.category.name == "construction" %}
-  <img src="{% static 'training/images/construction.jpg' %}" alt="{{ program.category.name }}" class="card-image">
-{% elif program.category.name == "care" %}
-  <img src="{% static 'training/images/care.jpg' %}" alt="{{ program.category.name }}" class="card-image">
-{% elif program.category.name == "land_management" %}
-  <img src="{% static 'training/images/land.jpg' %}" alt="{{ program.category.name }}" class="card-image">
-{% else %}
-  <img src="{% static 'training/images/tourism.jpg' %}" alt="{{ program.category.name }}" class="card-image">
-{% endif %}
+
+    <!-- Detail URL now uses slug instead of pk — clean URLs (ADR-003) -->
+    <a href="{% url 'training:program_detail' program.slug %}" class="program-card">
+
+      {% if program.title == "Diploma of Construction Management" %}
+        <img src="{% static 'training/images/construction2.jpg' %}" alt="{{ program.title }}" class="card-image">
+      {% elif program.title == "Certificate III in Community Services" %}
+        <img src="{% static 'training/images/community.jpg' %}" alt="{{ program.title }}" class="card-image">
+      {% elif program.category.name == "construction" %}
+        <img src="{% static 'training/images/construction.jpg' %}" alt="{{ program.category.name }}" class="card-image">
+      {% elif program.category.name == "care" %}
+        <img src="{% static 'training/images/care.jpg' %}" alt="{{ program.category.name }}" class="card-image">
+      {% elif program.category.name == "land_management" %}
+        <img src="{% static 'training/images/land.jpg' %}" alt="{{ program.category.name }}" class="card-image">
+      {% else %}
+        <img src="{% static 'training/images/tourism.jpg' %}" alt="{{ program.category.name }}" class="card-image">
+      {% endif %}
+
       <div class="card-body">
         <div class="card-tags">
-          <span class="tag tag-{{ program.category.name|lower|cut:' ' }}">{{ program.category.name }}</span>
+          <span class="tag tag-{{ program.category.name|lower }}">
+            {{ program.category.get_name_display }}
+          </span>
           <span class="tag tag-region">{{ program.region.name }}</span>
+          {% if program.is_long_program %}
+            <span class="tag tag-long">Extended</span>
+          {% endif %}
         </div>
         <h3 class="card-title">{{ program.title }}</h3>
         <p class="card-description">{{ program.description|truncatewords:20 }}</p>
         <div class="card-meta">
-          <span class="card-duration">⏱ {{ program.duration_weeks }} weeks</span>
+          <!-- Uses duration_display property — DRY -->
+          <span class="card-duration">⏱ {{ program.duration_display }}</span>
           <span class="card-arrow">→</span>
         </div>
       </div>
+
     </a>
     {% endfor %}
   </div>
+
+  <!-- Pagination -->
+  {% if is_paginated %}
+  <div class="pagination">
+    {% if page_obj.has_previous %}
+      <a href="?page={{ page_obj.previous_page_number }}" class="btn btn-outline">← Previous</a>
+    {% endif %}
+    <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+    {% if page_obj.has_next %}
+      <a href="?page={{ page_obj.next_page_number }}" class="btn btn-outline">Next →</a>
+    {% endif %}
+  </div>
+  {% endif %}
+
 {% else %}
   <div class="empty-state">
     <div class="empty-state-icon">🔍</div>

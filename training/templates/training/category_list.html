@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "training/base.html" %}
 {% load static %}
 
 {% block title %}Categories — NT Workforce Training Pathways{% endblock %}
@@ -12,41 +12,42 @@
 
 <div class="categories-grid">
 
-  <a href="{% url 'training:program_list' %}?category=1" class="category-card">
-    <img src="{% static 'training/images/construction.jpg' %}" alt="Construction" class="category-card-image">
-    <div class="category-card-overlay"></div>
-    <div class="category-card-content">
-      <div class="category-card-title">🏗️ Construction</div>
-      <div class="category-card-count">Building & Infrastructure</div>
-    </div>
-  </a>
+  {% for category in categories %}
+  <!-- Link to category_detail — clean URL using category.name -->
+  <a href="{% url 'training:category_detail' category.name %}" class="category-card">
 
-  <a href="{% url 'training:program_list' %}?category=2" class="category-card">
-    <img src="{% static 'training/images/care.jpg' %}" alt="Care Services" class="category-card-image">
-    <div class="category-card-overlay"></div>
-    <div class="category-card-content">
-      <div class="category-card-title">🤝 Care Services</div>
-      <div class="category-card-count">Community & Health Care</div>
-    </div>
-  </a>
+    {% if category.name == "construction" %}
+      <img src="{% static 'training/images/construction.jpg' %}" alt="Construction" class="category-card-image">
+    {% elif category.name == "care" %}
+      <img src="{% static 'training/images/care.jpg' %}" alt="Care Services" class="category-card-image">
+    {% elif category.name == "land_management" %}
+      <img src="{% static 'training/images/land.jpg' %}" alt="Land Management" class="category-card-image">
+    {% else %}
+      <img src="{% static 'training/images/tourism.jpg' %}" alt="Tourism" class="category-card-image">
+    {% endif %}
 
-  <a href="{% url 'training:program_list' %}?category=3" class="category-card">
-    <img src="{% static 'training/images/land.jpg' %}" alt="Land Management" class="category-card-image">
     <div class="category-card-overlay"></div>
     <div class="category-card-content">
-      <div class="category-card-title">🌿 Land Management</div>
-      <div class="category-card-count">Environment & Agriculture</div>
+      <div class="category-card-title">
+        {% if category.name == "construction" %}🏗️
+        {% elif category.name == "care" %}🤝
+        {% elif category.name == "land_management" %}🌿
+        {% else %}🏞️
+        {% endif %}
+        {{ category.get_name_display }}
+      </div>
+      <!-- active_program_count from annotated queryset (Task 1.4.2) -->
+      <div class="category-card-count">
+        {{ category.active_program_count }} active program{{ category.active_program_count|pluralize }}
+      </div>
     </div>
   </a>
-
-  <a href="{% url 'training:program_list' %}?category=4" class="category-card">
-    <img src="{% static 'training/images/tourism.jpg' %}" alt="Tourism" class="category-card-image">
-    <div class="category-card-overlay"></div>
-    <div class="category-card-content">
-      <div class="category-card-title">🏞️ Tourism</div>
-      <div class="category-card-count">Hospitality & Tourism</div>
-    </div>
-  </a>
+  {% empty %}
+  <div class="empty-state">
+    <div class="empty-state-icon">🏷️</div>
+    <h3>No categories found</h3>
+  </div>
+  {% endfor %}
 
 </div>
 

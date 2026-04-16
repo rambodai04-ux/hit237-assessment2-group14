@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "training/base.html" %}
 {% load static %}
 
 {% block title %}Regions — NT Workforce Training Pathways{% endblock %}
@@ -16,10 +16,21 @@
     <img src="{% static 'training/images/hero.jpg' %}" alt="{{ region.name }}" class="card-image">
     <div class="card-body">
       <h3 class="card-title">{{ region.name }}</h3>
-      <p class="card-description">{{ region.description }}</p>
+      {% if region.description %}
+        <p class="card-description">{{ region.description }}</p>
+      {% endif %}
+      <div class="card-meta">
+        
+        <span class="card-duration">
+          📋 {{ region.active_program_count }} active program{{ region.active_program_count|pluralize }}
+        </span>
+      </div>
       <div class="card-meta">
         <a href="{% url 'training:program_list' %}?region={{ region.id }}" class="btn btn-primary">
           View Programs →
+        </a>
+        <a href="{% url 'training:region_detail' region.slug %}" class="btn btn-outline">
+          Region Detail
         </a>
       </div>
     </div>

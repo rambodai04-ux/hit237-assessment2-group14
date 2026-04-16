@@ -1,0 +1,56 @@
+{% extends "training/base.html" %}
+{% load static %}
+
+{% block title %}{{ region.name }} — NT Workforce Training Pathways{% endblock %}
+
+{% block content %}
+
+<a href="{% url 'training:region_list' %}" class="btn btn-outline mb-2">← Back to Regions</a>
+
+<div class="section-header">
+  <h1 class="section-title">{{ region.name }}</h1>
+  {% if region.description %}
+    <p class="section-subtitle">{{ region.description }}</p>
+  {% endif %}
+</div>
+
+<div class="section-header">
+  <h2 class="section-title">Active Programs in {{ region.name }}</h2>
+</div>
+
+{% if region.programs.all %}
+  <div class="programs-grid">
+    {% for program in region.programs.all %}
+    <a href="{% url 'training:program_detail' program.slug %}" class="program-card">
+      {% if program.category.name == "construction" %}
+        <img src="{% static 'training/images/construction.jpg' %}" alt="{{ program.title }}" class="card-image">
+      {% elif program.category.name == "care" %}
+        <img src="{% static 'training/images/care.jpg' %}" alt="{{ program.title }}" class="card-image">
+      {% elif program.category.name == "land_management" %}
+        <img src="{% static 'training/images/land.jpg' %}" alt="{{ program.title }}" class="card-image">
+      {% else %}
+        <img src="{% static 'training/images/tourism.jpg' %}" alt="{{ program.title }}" class="card-image">
+      {% endif %}
+      <div class="card-body">
+        <div class="card-tags">
+          <span class="tag tag-{{ program.category.name }}">{{ program.category.get_name_display }}</span>
+        </div>
+        <h3 class="card-title">{{ program.title }}</h3>
+        <p class="card-description">{{ program.description|truncatewords:20 }}</p>
+        <div class="card-meta">
+          <span class="card-duration">⏱ {{ program.duration_display }}</span>
+          <span class="card-arrow">→</span>
+        </div>
+      </div>
+    </a>
+    {% endfor %}
+  </div>
+{% else %}
+  <div class="empty-state">
+    <div class="empty-state-icon">🔍</div>
+    <h3>No active programs in {{ region.name }}</h3>
+    <p><a href="{% url 'training:program_list' %}">View all programs</a></p>
+  </div>
+{% endif %}
+
+{% endblock %}
