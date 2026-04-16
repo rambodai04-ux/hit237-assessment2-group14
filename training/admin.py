@@ -47,7 +47,7 @@ class TrainingProgramAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug": ("title",)}
     readonly_fields = ("created_at", "updated_at", "get_summary_display")
 
-    # Task 1.3.2 — select_related in admin list to avoid N+1
+
     list_select_related = ("region", "category")
 
     fieldsets = (
