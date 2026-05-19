@@ -1,9 +1,19 @@
+from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import HttpResponseForbidden
+from django.shortcuts import render, redirect
+from django.views import View
 from django.views.generic import DetailView, ListView
 from django.db.models import Q, Prefetch, Count
 from .models import Category, Region, TrainingProgram
 
+class StaffRequiredMixin:
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_staff:
+            return HttpResponseForbidden("You do not have permission to access this page.")
+        return super().dispatch(request, *args, **kwargs)
 
-class ProgramListView(ListView):
+class ProgramListView(LoginRequiredMixin, ListView):
     model = TrainingProgram
     template_name = "training/program_list.html"
     context_object_name = "programs"
@@ -35,7 +45,7 @@ class ProgramListView(ListView):
         return context
 
 
-class ProgramDetailView(DetailView):
+class ProgramDetailView(LoginRequiredMixin, DetailView):
     model = TrainingProgram
     template_name = "training/program_detail.html"
     context_object_name = "program"
@@ -51,7 +61,7 @@ class ProgramDetailView(DetailView):
         context["is_long"] = self.object.is_long_program
         return context
 
-class RegionListView(ListView):
+class RegionListView(LoginRequiredMixin, ListView):
     model = Region
     template_name = "training/region_list.html"
     context_object_name = "regions"
@@ -59,7 +69,7 @@ class RegionListView(ListView):
     def get_queryset(self):
         return Region.with_program_counts()
 
-class RegionDetailView(DetailView):
+class RegionDetailView(LoginRequiredMixin, DetailView):
     model = Region
     template_name = "training/region_detail.html"
     context_object_name = "region"
@@ -78,7 +88,7 @@ class RegionDetailView(DetailView):
         )
 
 
-class CategoryListView(ListView):
+class CategoryListView(LoginRequiredMixin, ListView):
     model = Category
     template_name = "training/category_list.html"
     context_object_name = "categories"
@@ -87,7 +97,7 @@ class CategoryListView(ListView):
         return Category.with_program_counts()
 
 
-class CategoryDetailView(DetailView):
+class CategoryDetailView(LoginRequiredMixin, DetailView):
     model = Category
     template_name = "training/category_detail.html"
     context_object_name = "category"
@@ -104,3 +114,4 @@ class CategoryDetailView(DetailView):
                          .order_by("-created_at"),
             )
         )
+    
