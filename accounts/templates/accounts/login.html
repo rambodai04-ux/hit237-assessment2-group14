@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login – NT Training Pathways</title>
+    <link rel="stylesheet" href="/static/training/styles.css">
+    <style>
+        .auth-container { max-width: 420px; margin: 80px auto; padding: 0 20px; }
+        .auth-box { background: white; padding: 32px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        h2 { margin-top: 0; margin-bottom: 24px; color: #1a1a2e; }
+        .field { margin-bottom: 16px; }
+        label { display: block; margin-bottom: 4px; font-weight: 600; color: #333; }
+        input { width: 100%; padding: 9px 12px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; font-size: 15px; }
+        button { width: 100%; padding: 10px; background: #e63946; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; font-weight: 600; }
+        button:hover { background: #c1121f; }
+        .errors { color: #c00; background: #fee; border: 1px solid #faa; padding: 10px 14px; border-radius: 4px; margin-bottom: 16px; font-size: 14px; }
+        .auth-footer { text-align: center; margin-top: 16px; font-size: 14px; }
+        .auth-footer a { color: #e63946; }
+    </style>
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-box">
+            <h2>Sign In</h2>
+
+            {% if form.non_field_errors %}
+                <div class="errors">{{ form.non_field_errors }}</div>
+            {% endif %}
+
+            <form method="post">
+                {% csrf_token %}
+                <div class="field">
+                    <label for="{{ form.username.id_for_label }}">Username</label>
+                    {{ form.username }}
+                    {% if form.username.errors %}<div class="errors">{{ form.username.errors }}</div>{% endif %}
+                </div>
+                <div class="field">
+                    <label for="{{ form.password.id_for_label }}">Password</label>
+                    {{ form.password }}
+                    {% if form.password.errors %}<div class="errors">{{ form.password.errors }}</div>{% endif %}
+                </div>
+                <button type="submit">Log In</button>
+            </form>
+
+            <div class="auth-footer">
+                Don't have an account? <a href="{% url 'accounts:signup' %}">Sign up</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

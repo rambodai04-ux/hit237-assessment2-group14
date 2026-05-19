@@ -1,0 +1,71 @@
+{% extends "training/base.html" %}
+{% load static %}
+
+{% block title %}{{ category.get_name_display }} — NT Workforce Training Pathways{% endblock %}
+
+{% block content %}
+
+<a href="{% url 'training:category_list' %}" class="btn btn-outline mb-2">← Back to Categories</a>
+
+<div class="detail-hero">
+  {% if category.name == "construction" %}
+    <img src="{% static 'training/images/construction.jpg' %}" alt="{{ category }}" class="detail-hero-image">
+  {% elif category.name == "care" %}
+    <img src="{% static 'training/images/care.jpg' %}" alt="{{ category }}" class="detail-hero-image">
+  {% elif category.name == "land_management" %}
+    <img src="{% static 'training/images/land.jpg' %}" alt="{{ category }}" class="detail-hero-image">
+  {% else %}
+    <img src="{% static 'training/images/tourism.jpg' %}" alt="{{ category }}" class="detail-hero-image">
+  {% endif %}
+  <div class="detail-hero-overlay"></div>
+  <div class="detail-hero-content">
+    <h1 class="detail-title">{{ category.get_name_display }}</h1>
+    {% if category.description %}
+      <p>{{ category.description }}</p>
+    {% endif %}
+  </div>
+</div>
+
+<div class="section-header">
+  <h2 class="section-title">Programs in {{ category.get_name_display }}</h2>
+</div>
+
+{% if category.programs.all %}
+  <div class="programs-grid">
+    {% for program in category.programs.all %}
+    <a href="{% url 'training:program_detail' program.slug %}" class="program-card">
+      {% if category.name == "construction" %}
+        <img src="{% static 'training/images/construction.jpg' %}" alt="{{ program.title }}" class="card-image">
+      {% elif category.name == "care" %}
+        <img src="{% static 'training/images/care.jpg' %}" alt="{{ program.title }}" class="card-image">
+      {% elif category.name == "land_management" %}
+        <img src="{% static 'training/images/land.jpg' %}" alt="{{ program.title }}" class="card-image">
+      {% else %}
+        <img src="{% static 'training/images/tourism.jpg' %}" alt="{{ program.title }}" class="card-image">
+      {% endif %}
+      <div class="card-body">
+        <div class="card-tags">
+          <span class="tag tag-region">{{ program.region.name }}</span>
+          {% if program.is_long_program %}
+            <span class="tag tag-long">Extended</span>
+          {% endif %}
+        </div>
+        <h3 class="card-title">{{ program.title }}</h3>
+        <p class="card-description">{{ program.description|truncatewords:20 }}</p>
+        <div class="card-meta">
+          <span class="card-duration">⏱ {{ program.duration_display }}</span>
+          <span class="card-arrow">→</span>
+        </div>
+      </div>
+    </a>
+    {% endfor %}
+  </div>
+{% else %}
+  <div class="empty-state">
+    <div class="empty-state-icon">🔍</div>
+    <h3>No active programs in {{ category.get_name_display }}</h3>
+    <p><a href="{% url 'training:program_list' %}">View all programs</a></p>
+  </div>
+{% endif %}
+
+{% endblock %}

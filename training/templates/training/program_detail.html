@@ -1,0 +1,78 @@
+{% extends "training/base.html" %}
+{% load static %}
+
+{% block title %}{{ program.title }} — NT Workforce Training Pathways{% endblock %}
+
+{% block content %}
+
+<a href="{% url 'training:program_list' %}" class="btn btn-outline mb-2">← Back to Programs</a>
+
+<div class="detail-hero">
+  {% if program.category.name == "construction" %}
+    <img src="{% static 'training/images/construction.jpg' %}" alt="{{ program.title }}" class="detail-hero-image">
+  {% elif program.category.name == "care" %}
+    <img src="{% static 'training/images/care.jpg' %}" alt="{{ program.title }}" class="detail-hero-image">
+  {% elif program.category.name == "land_management" %}
+    <img src="{% static 'training/images/land.jpg' %}" alt="{{ program.title }}" class="detail-hero-image">
+  {% else %}
+    <img src="{% static 'training/images/tourism.jpg' %}" alt="{{ program.title }}" class="detail-hero-image">
+  {% endif %}
+  <div class="detail-hero-overlay"></div>
+  <div class="detail-hero-content">
+    <div class="card-tags mb-1">
+      <span class="tag tag-region">{{ program.region.name }}</span>
+      <span class="tag tag-{{ program.category.name }}">{{ program.category.get_name_display }}</span>
+      {% if is_long %}
+        <span class="tag tag-long">Extended Program</span>
+      {% endif %}
+      </div>
+    <h1 class="detail-title">{{ program.title }}</h1>
+    <p class="detail-summary">{{ program_summary }}</p>
+  </div>
+</div>
+
+<div class="detail-grid">
+  <div class="detail-card">
+    <h2>About This Program</h2>
+    <p>{{ program.description }}</p>
+    <h2>Eligibility Requirements</h2>
+    <p>{{ program.eligibility }}</p>
+  </div>
+  <div class="detail-card">
+    <h2>Program Details</h2>
+    <div class="info-item">
+      <span class="info-label">Category</span>
+      <span class="info-value">
+        <a href="{% url 'training:category_detail' program.category.name %}">
+          {{ program.category.get_name_display }}
+        </a>
+      </span>
+    </div>
+    <div class="info-item">
+      <span class="info-label">Region</span>
+      <span class="info-value">
+        <a href="{% url 'training:region_detail' program.region.slug %}">
+          {{ program.region.name }}
+        </a>
+      </span>
+    </div>
+    <div class="info-item">
+      <span class="info-label">Duration</span>
+      <span class="info-value">{{ program.duration_display }}</span>
+    </div>
+    <div class="info-item">
+      <span class="info-label">Status</span>
+      <span class="info-value">{% if program.is_active %}✅ Active{% else %}❌ Inactive{% endif %}</span>
+    </div>
+    <div class="info-item">
+      <span class="info-label">Added</span>
+      <span class="info-value">{{ program.created_at|date:"d M Y" }}</span>
+    </div>
+  </div>
+    <div class="info-item">
+    <span class="info-label">Last Updated</span>
+    <span class="info-value">{{ program.updated_at|date:"d M Y" }}</span>
+  </div>
+</div>
+
+{% endblock %}
