@@ -285,7 +285,7 @@ body {
   text-decoration: none;
   border: none;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: background 0.2s ease, transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
 }
 
 .btn-primary {
@@ -295,8 +295,13 @@ body {
 
 .btn-primary:hover {
   background: var(--primary-light);
-  transform: translateY(-1px);
-  box-shadow: var(--shadow);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(26, 58, 92, 0.3);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+  box-shadow: none;
 }
 
 .btn-accent {
@@ -306,8 +311,13 @@ body {
 
 .btn-accent:hover {
   background: var(--accent-light);
-  transform: translateY(-1px);
-  box-shadow: var(--shadow);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(232, 98, 42, 0.35);
+}
+
+.btn-accent:active {
+  transform: translateY(0);
+  box-shadow: none;
 }
 
 .btn-outline {
@@ -319,6 +329,13 @@ body {
 .btn-outline:hover {
   background: var(--primary);
   color: var(--white);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(26, 58, 92, 0.2);
+}
+
+.btn-outline:active {
+  transform: translateY(0);
+  box-shadow: none;
 }
 
 /* --- Program Cards ---------------------------------------- */
@@ -333,22 +350,33 @@ body {
   border-radius: var(--radius);
   overflow: hidden;
   box-shadow: var(--shadow);
-  transition: all 0.3s;
+  transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.3s ease, border-color 0.3s ease;
   text-decoration: none;
   color: inherit;
   display: flex;
   flex-direction: column;
+  border: 1px solid transparent;
 }
 
 .program-card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-lg);
+  transform: translateY(-6px);
+  box-shadow: 0 20px 40px -8px rgba(26, 58, 92, 0.18), 0 8px 16px -4px rgba(0,0,0,0.08);
+  border-color: rgba(26, 58, 92, 0.1);
+}
+
+.program-card:hover .card-arrow {
+  transform: translateX(4px);
 }
 
 .card-image {
   width: 100%;
   height: 200px;
   object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.program-card:hover .card-image {
+  transform: scale(1.04);
 }
 
 .card-body {
@@ -415,6 +443,7 @@ body {
   color: var(--accent);
   font-size: 1.2rem;
   font-weight: 700;
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 /* --- Category Cards --------------------------------------- */
@@ -428,7 +457,7 @@ body {
   border-radius: var(--radius);
   overflow: hidden;
   box-shadow: var(--shadow);
-  transition: all 0.3s;
+  transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.3s ease;
   text-decoration: none;
   color: inherit;
   position: relative;
@@ -438,8 +467,8 @@ body {
 }
 
 .category-card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-lg);
+  transform: translateY(-6px);
+  box-shadow: 0 20px 40px -8px rgba(26, 58, 92, 0.25), 0 8px 16px -4px rgba(0,0,0,0.1);
 }
 
 .category-card-image {
@@ -448,12 +477,22 @@ body {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.category-card:hover .category-card-image {
+  transform: scale(1.06);
 }
 
 .category-card-overlay {
   position: absolute;
   inset: 0;
   background: linear-gradient(to top, rgba(26,58,92,0.9) 0%, transparent 60%);
+  transition: background 0.3s ease;
+}
+
+.category-card:hover .category-card-overlay {
+  background: linear-gradient(to top, rgba(26,58,92,0.95) 0%, rgba(26,58,92,0.2) 60%);
 }
 
 .category-card-content {
