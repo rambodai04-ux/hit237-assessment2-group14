@@ -34,4 +34,4 @@ class TrainingProgramSerializer(serializers.ModelSerializer):
 class TrainingProgramListAPIView(ListAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = TrainingProgramSerializer
-    queryset = TrainingProgram.get_active_programs()
+    queryset = TrainingProgram.get_active_programs() 
