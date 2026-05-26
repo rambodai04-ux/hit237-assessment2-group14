@@ -497,4 +497,4 @@ class TrainingProgramAPITest(TestCase):
         item = next(p for p in response.json() if p["title"] == "Active API Program")
         self.assertEqual(item["region_name"], "Darwin")
         self.assertEqual(item["category_name"], "Construction")
-        self.assertEqual(item["duration_display"], "12 weeks")
+        self.assertEqual(item["duration_display"], "12 weeks") 
