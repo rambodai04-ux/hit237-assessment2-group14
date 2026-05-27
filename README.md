@@ -45,7 +45,15 @@ python manage.py runserver
 
 ## AI Tool Usage
 
-This project used Claude (Anthropic) as an AI coding assistant. All generated code was reviewed and understood by the team. Chat history is available as evidence of responsible AI usage per CDU guidelines.
+This project used Claude (Anthropic) as a support and helper tool throughout development. Claude was used for:
+
+- Guidance on Django concepts and best practices
+- Help debugging errors and understanding error messages
+- Reviewing code structure and suggesting improvements
+- Assistance with writing and formatting documentation (e.g. ERD, ADRs, README)
+- Answering questions about REST API design and testing
+
+All code was written, reviewed, and understood by the team. Claude was used as a learning aid and assistant — not as a replacement for team effort. Chat history is available as evidence of responsible AI usage per CDU guidelines.
 
 ## REVIEW CONFIRMATION
 
