@@ -11,11 +11,6 @@ class CategorySerializer(serializers.ModelSerializer):
         fields = ['id', 'name']
 
 
-class RegionSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Region
-        fields = ['id', 'name', 'slug']
-
 
 class TrainingProgramSerializer(serializers.ModelSerializer):
     region_name = serializers.CharField(source='region.name', read_only=True)

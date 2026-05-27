@@ -115,3 +115,43 @@ class CategoryDetailView(LoginRequiredMixin, DetailView):
             )
         )
     
+class DashboardView(LoginRequiredMixin, View):
+    template_name = "training/dashboard.html"
+
+    def get(self, request):
+        from .models import SavedProgram
+        saved = SavedProgram.objects.filter(
+            user=request.user
+        ).select_related('program__region', 'program__category')
+        context = {
+            'saved_programs': saved,
+            'saved_count': saved.count(),
+            'username': request.user.username,
+        }
+        return render(request, self.template_name, context)
+
+
+class SaveProgramView(LoginRequiredMixin, View):
+    def post(self, request, slug):
+        from .services import save_program
+        from .exceptions import ProgramNotFound, ProgramInactive
+        try:
+            save_program(request.user, slug)
+            messages.success(request, "Program saved to your dashboard.")
+        except ProgramNotFound:
+            messages.error(request, "Program not found.")
+        except ProgramInactive:
+            messages.warning(request, "This program is no longer active.")
+        return redirect('training:program_detail', slug=slug)
+
+
+class UnsaveProgramView(LoginRequiredMixin, View):
+    def post(self, request, slug):
+        from .services import unsave_program
+        from .exceptions import ProgramNotFound
+        try:
+            unsave_program(request.user, slug)
+            messages.success(request, "Program removed from your dashboard.")
+        except ProgramNotFound:
+            messages.error(request, "Program not found.")
+        return redirect('training:dashboard')
