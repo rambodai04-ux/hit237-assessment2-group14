@@ -106,6 +106,39 @@ body {
   color: var(--white);
 }
 
+/* --- Messages -------------------------------------------- */
+.messages-container {
+  max-width: 900px;
+  margin: 12px auto;
+  padding: 0 20px;
+}
+
+.message {
+  padding: 10px 16px;
+  border-radius: 4px;
+  margin-bottom: 8px;
+}
+
+.message--success {
+  background: #d1e7dd;
+  color: #0f5132;
+}
+
+.message--error {
+  background: #f8d7da;
+  color: #842029;
+}
+
+.message--warning {
+  background: #fff3cd;
+  color: #664d03;
+}
+
+.message--info {
+  background: #cff4fc;
+  color: #055160;
+}
+
 /* --- Hero Section ----------------------------------------- */
 .hero {
   position: relative;

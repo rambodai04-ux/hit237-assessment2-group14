@@ -231,3 +231,26 @@ class TrainingProgram(models.Model):
         """Formatted duration string — DRY, reusable in templates."""
         w = self.duration_weeks
         return f"{w} week{'s' if w != 1 else ''}"
+    
+
+class SavedProgram(models.Model):
+    """Allows authenticated users to bookmark training programs."""
+    user = models.ForeignKey(
+        'auth.User',
+        on_delete=models.CASCADE,
+        related_name='saved_programs',
+    )
+    program = models.ForeignKey(
+        TrainingProgram,
+        on_delete=models.CASCADE,
+        related_name='saved_by',
+    )
+    saved_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'program')
+        ordering = ['-saved_at']
+
+    def __str__(self):
+        return f"{self.user.username} → {self.program.title}"
+

@@ -121,4 +121,5 @@ STATIC_URL = "static/"
 
 # Authentication settings
 LOGIN_URL = '/accounts/login/'
+LOGIN_REDIRECT_URL = '/dashboard/'
 LOGOUT_REDIRECT_URL = '/accounts/login/'
